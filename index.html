@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orbitize AI | Intelligent Real Estate Systems</title>
+  <!-- Tabler Icons CDN Link for Icon Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --p100:#e8e2fd;--p200:#c4b8f8;--p400:#8b6ef5;--p600:#5b3fd4;--p800:#2d1a7a;
+      --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;
+      --border:rgba(255,255,255,0.07);--border2:rgba(139,110,245,0.28);
+      --text:#f0f0f5;--muted:#888894;--faint:#3a3a48;
+    }
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    #oc{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;border-bottom:1px solid var(--border);background:rgba(10,10,15,0.88);backdrop-filter:blur(18px);}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-text{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;color:var(--text);letter-spacing:-0.01em;}
+    .logo-text span{color:var(--p400);}
+    .nav-right{display:flex;align-items:center;gap:12px;}
+    .nav-link{font-size:13px;color:var(--muted);background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:color 0.2s;padding:0 4px;}
+    .nav-link:hover{color:var(--text);}
+    .nav-cta{font-size:13px;color:var(--text);border:1px solid var(--border2);border-radius:7px;padding:8px 18px;cursor:pointer;background:rgba(139,110,245,0.08);font-family:'Inter',sans-serif;transition:all 0.2s;}
+    .nav-cta:hover{background:rgba(139,110,245,0.18);border-color:var(--p400);}
+
+    .hero{position:relative;z-index:1;padding:130px 48px 110px;max-width:900px;}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--p400);margin-bottom:28px;font-weight:500;border:1px solid var(--border2);border-radius:20px;padding:5px 14px;background:rgba(139,110,245,0.06);}
+    .eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--p400);}
+    .hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(34px,5.5vw,60px);font-weight:500;line-height:1.1;margin-bottom:28px;letter-spacing:-0.02em;}
+    .hero h1 em{font-style:normal;color:var(--p400);}
+    .hero h1 .dim{color:rgba(240,240,245,0.45);}
+    .hero-sub{font-size:16px;color:var(--muted);line-height:1.85;max-width:540px;margin-bottom:44px;}
+    .hero-sub strong{color:rgba(240,240,245,0.75);font-weight:400;}
+    .hero-btns{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .btn-p{background:var(--p600);color:#fff;font-size:14px;font-weight:500;padding:13px 30px;border-radius:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;letter-spacing:0.01em;}
+    .btn-p:hover{background:var(--p400);transform:translateY(-1px);}
+    .btn-g{color:var(--muted);font-size:14px;padding:13px 20px;cursor:pointer;border:none;background:transparent;font-family:'Inter',sans-serif;transition:color 0.2s;}
+    .btn-g:hover{color:var(--text);}
+
+    .stat-row{display:flex;gap:48px;margin-top:64px;padding-top:48px;border-top:1px solid var(--border);flex-wrap:wrap;}
+    .stat{display:flex;flex-direction:column;gap:4px;}
+    .stat-num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:600;color:var(--text);}
+    .stat-num span{color:var(--p400);}
+    .stat-label{font-size:12px;color:var(--muted);}
+
+    .divider{height:1px;background:var(--border);margin:0 48px;position:relative;z-index:1;}
+    .section{padding:88px 48px;position:relative;z-index:1;}
+    .slabel{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:16px;font-weight:500;}
+    .section-head{font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,30px);font-weight:500;color:var(--text);margin-bottom:48px;line-height:1.25;letter-spacing:-0.01em;max-width:560px;}
+    .section-head em{font-style:normal;color:var(--p400);}
+
+    .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+    .si{background:var(--bg2);padding:30px;transition:background 0.25s;position:relative;}
+    .si:hover{background:var(--bg3);}
+    .si::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,110,245,0),transparent);transition:background 0.3s;}
+    .si:hover::before{background:linear-gradient(90deg,transparent,rgba(139,110,245,0.4),transparent);}
+    .sicon{width:38px;height:38px;border-radius:9px;background:rgba(139,110,245,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:18px;color:var(--p400);font-size:19px;border:1px solid var(--border2);}
+    .sname{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;margin-bottom:10px;color:var(--text);}
+    .sdesc{font-size:13px;color:var(--muted);line-height:1.65;}
+    .sbottom{margin-top:16px;font-size:11px;color:var(--p400);letter-spacing:0.04em;}
+
+    .plist{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+    .prow{background:var(--bg2);padding:30px 36px;display:flex;align-items:flex-start;justify-content:space-between;gap:28px;transition:background 0.2s;}
+    .prow:hover{background:var(--bg3);}
+    .pnum{font-size:11px;color:var(--faint);font-weight:500;margin-bottom:10px;letter-spacing:0.08em;font-family:'Space Grotesk',sans-serif;}
+    .pname{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:500;margin-bottom:8px;color:var(--text);}
+    .pdesc{font-size:13px;color:var(--muted);line-height:1.7;max-width:500px;}
+    .ptags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;}
+    .tag{font-size:11px;padding:3px 10px;border-radius:4px;background:rgba(139,110,245,0.08);color:var(--p200);border:1px solid rgba(139,110,245,0.18);}
+    .tag-infra{background:rgba(255,255,255,0.03);color:var(--muted);border-color:var(--border);}
+    .plink{flex-shrink:0;font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:7px;padding:8px 16px;cursor:pointer;background:transparent;white-space:nowrap;transition:all 0.2s;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;}
+    .plink:hover{color:var(--p400);border-color:var(--border2);}
+
+    .proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:48px;}
+    .proof-item{background:var(--bg2);padding:28px;text-align:center;}
+    .proof-num{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:600;color:var(--p400);margin-bottom:6px;}
+    .proof-label{font-size:13px;color:var(--muted);line-height:1.5;}
+
+    .wbox{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:44px;max-width:660px;}
+    .wbox p{font-size:15px;color:var(--muted);line-height:1.9;}
+    .wbox strong{color:var(--text);font-weight:500;}
+    .srow{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+    .spill{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:20px;padding:5px 14px;}
+
+    .contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+    .contact-left h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:500;margin-bottom:16px;letter-spacing:-0.01em;line-height:1.2;}
+    .contact-left p{color:var(--muted);font-size:15px;line-height:1.8;margin-bottom:32px;}
+    .contact-btns{display:flex;flex-direction:column;gap:10px;}
+    .cbtn-primary{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--p600);color:#fff;font-size:14px;font-weight:500;padding:14px 28px;border-radius:8px;text-decoration:none;font-family:'Inter',sans-serif;transition:all 0.2s;}
+    .cbtn-primary:hover{background:var(--p400);}
+    .cbtn-secondary{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:14px;padding:14px 28px;border-radius:8px;text-decoration:none;font-family:'Inter',sans-serif;transition:all 0.2s;border:1px solid var(--border);}
+    .cbtn-secondary:hover{color:var(--text);border-color:var(--border2);}
+    .contact-right{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:32px;}
+    .promise-item{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);}
+    .promise-item:last-child{border-bottom:none;padding-bottom:0;}
+    .promise-icon{width:32px;height:32px;border-radius:8px;background:rgba(139,110,245,0.1);display:flex;align-items:center;justify-content:center;color:var(--p400);font-size:15px;flex-shrink:0;margin-top:2px;}
+    .promise-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;}
+    .promise-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+    footer{position:relative;z-index:1;padding:36px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+    .fbrand{font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--faint);}
+    .flinks{display:flex;gap:24px;}
+    .flinks a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .flinks a:hover{color:var(--p400);}
+
+    @media(max-width:768px){
+      nav{padding:16px 20px;}
+      .hero{padding:80px 20px 60px;}
+      .section{padding:56px 20px;}
+      .divider{margin:0 20px;}
+      footer{padding:28px 20px;}
+      .prow{flex-direction:column;}
+      .plink{align-self:flex-start;}
+      .contact-wrap{grid-template-columns:1fr;}
+      .stat-row{gap:28px;}
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="oc"></canvas>
+
+<nav>
+  <a class="logo" href="#">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="14" cy="14" rx="13" ry="5.5" stroke="#8b6ef5" stroke-width="1" opacity="0.5" transform="rotate(-30 14 14)"/>
+      <ellipse cx="14" cy="14" rx="13" ry="5.5" stroke="#8b6ef5" stroke-width="1" opacity="0.35" transform="rotate(30 14 14)"/>
+      <ellipse cx="14" cy="14" rx="13" ry="5.5" stroke="#8b6ef5" stroke-width="0.8" opacity="0.2"/>
+      <circle cx="14" cy="14" r="2.5" fill="#8b6ef5"/>
+      <circle cx="14" cy="14" r="4" fill="rgba(139,110,245,0.2)"/>
+    </svg>
+    <span class="logo-text">Orbitize<span>.ai</span></span>
+  </a>
+  <div class="nav-right">
+    <button class="nav-link" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Services</button>
+    <button class="nav-link" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">Work</button>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get blueprint →</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow"><span class="eyebrow-dot"></span>AI Automation for Real Estate</div>
+  <h1>Turn raw leads into<br><em>booked listings</em><br><span class="dim">while you sleep.</span></h1>
+  <p class="hero-sub">Independent brokers lose <strong>40% of leads</strong> to slow follow-up[cite: 2]. I build AI systems that respond in seconds, qualify automatically, and book appointments — so every Zillow ping becomes a real opportunity[cite: 2].</p>
+  <div class="hero-btns">
+    <button class="btn-p" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get my free blueprint →</button>
+    <button class="btn-g" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">See real systems</button>
+  </div>
+  <div class="stat-row">
+    <div class="stat"><span class="stat-num">3<span>s</span></span><span class="stat-label">Average lead response time</span></div>
+    <div class="stat"><span class="stat-num">10<span>+</span></span><span class="stat-label">Hours saved per week</span></div>
+    <div class="stat"><span class="stat-num">24<span>/7</span></span><span class="stat-label">Pipeline running without you</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="services">
+  <p class="slabel">What I build</p>
+  <h2 class="section-head">Every system targets a <em>real bottleneck</em> brokers face daily[cite: 2].</h2>
+  <div class="sgrid">
+    <div class="si">
+      <div class="sicon"><i class="ti ti-bolt" aria-hidden="true"></i></div>
+      <p class="sname">Instant lead response</p>
+      <p class="sdesc">Your Zillow and Realtor.com leads get a personalised response in under 3 seconds — day or night, weekend or holiday[cite: 2].</p>
+      <p class="sbottom">↳ No more lost leads to faster agents[cite: 2]</p>
+    </div>
+    <div class="si">
+      <div class="sicon"><i class="ti ti-filter" aria-hidden="true"></i></div>
+      <p class="sname">Automatic lead qualification</p>
+      <p class="sdesc">AI interviews your leads, scores intent, and only surfaces the ones worth your time — eliminating hours of manual sorting[cite: 2].</p>
+      <p class="sbottom">↳ Focus only on serious buyers[cite: 2]</p>
+    </div>
+    <div class="si">
+      <div class="sicon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
+      <p class="sname">Appointment booking engine</p>
+      <p class="sdesc">Qualified leads get booked directly into your calendar with zero back-and-forth[cite: 2]. The system handles objections and reschedules too[cite: 2].</p>
+      <p class="sbottom">↳ Wake up to booked calls[cite: 2]</p>
+    </div>
+    <div class="si">
+      <div class="sicon"><i class="ti ti-database" aria-hidden="true"></i></div>
+      <p class="sname">CRM without data entry</p>
+      <p class="sdesc">Every lead, note, status update, and follow-up task is logged automatically[cite: 2]. Your CRM stays perfect without you touching it[cite: 2].</p>
+      <p class="sbottom">↳ Zero manual admin work[cite: 2]</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="portfolio">
+  <p class="slabel">Live systems</p>
+  <h2 class="section-head">Real pipelines, <em>real results[cite: 2].</em></h2>
+  <div class="plist">
+    <div class="prow">
+      <div>
+        <p class="pnum">SYSTEM 01</p>
+        <p class="pname">Enterprise Outbound Sales Engine</p>
+        <p class="pdesc">A 7-stage outbound machine engineered to prospect luxury brokerages, map localized market intelligence, script personalized outreach, and deploy contextual sequences autonomously[cite: 2].</p>
+        <div class="ptags">
+          <span class="tag">High-Intent Outbound</span>
+          <span class="tag">Hyper-Personalized Systems</span>
+          <span class="tag">Autonomous Acquisition</span>
+        </div>
+        <div class="ptags">
+          <span class="tag tag-infra">n8n</span><span class="tag tag-infra">Groq LLaMA 3.3</span><span class="tag tag-infra">Tavily</span><span class="tag tag-infra">Airtable</span><span class="tag tag-infra">Gmail</span>
+        </div>
+      </div>
+      <a class="plink" href="#contact">Watch demo ↗</a>
+    </div>
+    <div class="prow">
+      <div>
+        <p class="pnum">SYSTEM 02</p>
+        <p class="pname">Omni-Channel Lead Intelligence Agent</p>
+        <p class="pdesc">Triggered instantaneously by live webhooks; this agent runs structural deep-web research on incoming real estate leads, cross-references regional holdings, updates CRM architecture, and triggers context-aware messaging in milliseconds[cite: 2].</p>
+        <div class="ptags">
+          <span class="tag">Deep-Web Lead Scoring</span>
+          <span class="tag">Instant Architectural Sync</span>
+          <span class="tag">Contextual Messaging</span>
+        </div>
+        <div class="ptags">
+          <span class="tag tag-infra">n8n</span><span class="tag tag-infra">Groq</span><span class="tag tag-infra">Tavily</span><span class="tag tag-infra">Airtable</span><span class="tag tag-infra">Gmail API</span>
+        </div>
+      </div>
+      <a class="plink" href="#contact">Watch demo ↗</a>
+    </div>
+    <div class="prow">
+      <div>
+        <p class="pnum">SYSTEM 03</p>
+        <p class="pname">Automated Pipeline Concierge & Qualifier</p>
+        <p class="pdesc">Direct API-level interceptor for major listing platforms[cite: 2]. Conducts real-time natural language discovery regarding buyer/seller timelines, capital limits, and motivations—passing verified premium opportunities straight to agents[cite: 2].</p>
+        <div class="ptags">
+          <span class="tag">Dynamic Intention Filtering</span>
+          <span class="tag">High-Priority Direct Alerts</span>
+          <span class="tag">Algorithmic Retention Nurture</span>
+        </div>
+        <div class="ptags">
+          <span class="tag tag-infra">n8n</span><span class="tag tag-infra">AI Agent</span><span class="tag tag-infra">CRM</span><span class="tag tag-infra">Slack</span><span class="tag tag-infra">Twilio</span>
+        </div>
+      </div>
+      <a class="plink" href="#contact">Watch demo ↗</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <p class="slabel">Why brokers choose this</p>
+  <h2 class="section-head">Built for brokers doing <em>real volume,</em> not tech experiments[cite: 2].</h2>
+  <div class="proof-grid">
+    <div class="proof-item"><p class="proof-num">40%</p><p class="proof-label">of leads lost to slow response — AI fixes this in seconds[cite: 2]</p></div>
+    <div class="proof-item"><p class="proof-num">5–20</p><p class="proof-label">person teams — the sweet spot where automation saves the most time[cite: 2]</p></div>
+    <div class="proof-item"><p class="proof-num">1×</p><p class="proof-label">build cost — system runs every day with zero ongoing effort[cite: 2]</p></div>
+  </div>
+  <div class="wbox">
+    <p>I work exclusively with <strong>independent real estate broker-owners</strong> who are serious about growth[cite: 2]. If you're currently managing leads in a spreadsheet, chasing follow-ups manually, or losing listings to faster competitors — this is built for you[cite: 2]. <strong>One system built right changes everything[cite: 2].</strong></p>
+    <div class="srow">
+      <span class="spill">n8n</span><span class="spill">Make.com</span><span class="spill">LangChain</span><span class="spill">Python</span><span class="spill">Groq</span><span class="spill">Gemini Pro</span><span class="spill">Airtable</span><span class="spill">FastAPI</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="contact">
+  <p class="slabel">Get in touch</p>
+  <div class="contact-wrap">
+    <div class="contact-left">
+      <h2>Get your free automation blueprint within 24 hours[cite: 2].</h2>
+      <p>Tell me about your current lead flow — I'll map out exactly which automation would save you the most time and send it back within 24 hours[cite: 2]. No pitch, no call required[cite: 2].</p>
+      <div class="contact-btns">
+        <a class="cbtn-primary" href="mailto:orbitizeai.co@gmail.com?subject=Automation%20Blueprint%20Request">Email me → orbitizeai.co@gmail.com</a>
+        <a class="cbtn-secondary" href="https://www.linkedin.com/in/sohailali-automation" target="_blank" rel="noopener"><i class="ti ti-brand-linkedin" aria-hidden="true"></i> Connect on LinkedIn</a>
+        <a class="cbtn-secondary" href="https://www.upwork.com/freelancers/~012e6be81538f738aa" target="_blank" rel="noopener"><i class="ti ti-briefcase" aria-hidden="true"></i> Hire on Upwork</a>
+      </div>
+    </div>
+    <div class="contact-right">
+      <div class="promise-item">
+        <div class="promise-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
+        <div><p class="promise-title">Blueprint in 24 hours</p><p class="promise-desc">I'll map your automation opportunity and send it back — no fluff, just a clear plan[cite: 2].</p></div>
+      </div>
+      <div class="promise-item">
+        <div class="promise-icon"><i class="ti ti-message" aria-hidden="true"></i></div>
+        <div><p class="promise-title">Text over calls</p><p class="promise-desc">I prefer async communication — you'll get thoughtful replies, not rushed calls[cite: 2].</p></div>
+      </div>
+      <div class="promise-item">
+        <div class="promise-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+        <div><p class="promise-title">Built once, runs forever</p><p class="promise-desc">Every system I build is yours — fully documented, maintainable, no lock-in[cite: 2].</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="fbrand">© 2026 Orbitize AI · Sohail Ali · Jamshedpur, India</span>
+  <div class="flinks">
+    <a href="mailto:orbitizeai.co@gmail.com">orbitizeai.co@gmail.com</a>
+    <a href="https://www.linkedin.com/in/sohailali-automation" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://www.upwork.com/freelancers/~012e6be81538f738aa" target="_blank" rel="noopener">Upwork</a>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('load', function() {
+  var canvas = document.getElementById('oc');
+  var ctx = canvas.getContext('2d');
+  var W, H, mouse = {x:0, y:0}, smooth = {x:0, y:0}, animT = 0;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    smooth.x = W * 0.68; smooth.y = H * 0.32;
+    mouse.x = smooth.x; mouse.y = smooth.y;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; });
+
+  var rings = [
+    {r:95,  speed:0.00055, tilt:0.3,  opacity:0.22, dash:[8,16],  lw:1.0},
+    {r:170, speed:-0.00032,tilt:-0.2, opacity:0.15, dash:[5,22],  lw:0.8},
+    {r:248, speed:0.00024, tilt:0.15, opacity:0.10, dash:[3,28],  lw:0.6},
+    {r:338, speed:-0.00018,tilt:-0.1, opacity:0.06, dash:[2,34],  lw:0.5},
+    {r:430, speed:0.00012, tilt:0.08, opacity:0.04, dash:[2,40],  lw:0.4},
+  ];
+
+  var orbs = [];
+  rings.forEach(function(ring, i) {
+    var count = i < 2 ? 2 : 1;
+    for(var k = 0; k < count; k++) {
+      orbs.push({ri:i, angle:Math.random()*Math.PI*2, pulse:Math.random()*Math.PI*2, size:[4,3,2.5,2,1.5][i]});
+    }
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    smooth.x += (mouse.x - smooth.x) * 0.05;
+    smooth.y += (mouse.y - smooth.y) * 0.05;
+
+    var gx = smooth.x, gy = smooth.y;
+    var dx = (mouse.x - W/2) / W;
+    var dy = (mouse.y - H/2) / H;
+
+    var grad = ctx.createRadialGradient(gx, gy, 0, gx, gy, 400);
+    grad.addColorStop(0, 'rgba(91,63,212,0.11)');
+    grad.addColorStop(0.55, 'rgba(139,110,245,0.04)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    rings.forEach(function(ring) {
+      var rot = animT * ring.speed + ring.tilt;
+      var rx = ring.r * (1 + dx * 0.1);
+      var ry = ring.r * 0.4 * (1 + dy * 0.08);
+      ctx.save();
+      ctx.translate(gx, gy);
+      ctx.rotate(rot);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(139,110,245,' + ring.opacity + ')';
+      ctx.lineWidth = ring.lw;
+      ctx.setLineDash(ring.dash);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    });
+
+    orbs.forEach(function(orb) {
+      var ring = rings[orb.ri];
+      orb.angle += ring.speed * 1.2;
+      orb.pulse += 0.025;
+      var rot = animT * ring.speed + ring.tilt;
+      var rx = ring.r * (1 + dx * 0.1);
+      var ry = ring.r * 0.4 * (1 + dy * 0.08);
+      var ex = Math.cos(orb.angle) * rx;
+      var ey = Math.sin(orb.angle) * ry;
+      var px = gx + ex*Math.cos(rot) - ey*Math.sin(rot);
+      var py = gy + ex*Math.sin(rot) + ey*Math.cos(rot);
+      var ps = 0.85 + Math.sin(orb.pulse) * 0.15;
+      var r = orb.size * ps;
+      var g2 = ctx.createRadialGradient(px, py, 0, px, py, r*4);
+      g2.addColorStop(0, 'rgba(200,185,255,0.95)');
+      g2.addColorStop(0.3, 'rgba(139,110,245,0.55)');
+      g2.addColorStop(1, 'rgba(139,110,245,0)');
+      ctx.beginPath();
+      ctx.arc(px, py, r*4, 0, Math.PI*2);
+      ctx.fillStyle = g2;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(225,215,255,1)';
+      ctx.fill();
+    });
+
+    animT += 16;
+    requestAnimationFrame(draw);
+  }
+  draw();
+});
+</script>
+</body>
+</html>
